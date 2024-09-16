@@ -34,8 +34,10 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Bump Version
+        env:
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           npm version patch
-          git push --follow-tags
+          git push --follow-tags "https://${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
