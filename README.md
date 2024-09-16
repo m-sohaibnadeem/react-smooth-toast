@@ -3,6 +3,10 @@
 
 A lightweight and customizable toaster notification library for React built with TypeScript. This library provides an easy-to-use API for displaying toast notifications with customizable icons, styles, positions, and animations.
 
+## Demo gif
+![Toast Demo](https://raw.githubusercontent.com/m-sohaibnadeem/react-smooth-toast/main/src/assets/toasts-demo.gif)
+
+
 ## Features
 
 - **Multiple Toast Types**: Supports `success`, `error`, `info`, and `warning` toasts.
