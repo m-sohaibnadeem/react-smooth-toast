@@ -12,7 +12,34 @@
     -moz-osx-font-smoothing: grayscale;
   }
   
-
+  .toast-material {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    border-radius: 4px;
+    box-shadow: 0 3px 5px -1px rgba(0,0,0,.2), 0 6px 10px 0 rgba(0,0,0,.14), 0 1px 18px 0 rgba(0,0,0,.12);
+    margin-bottom: 16px;
+    gap: 10px;
+  }
+  
+  .toast-material-content {
+    display: flex;
+    align-items: center; gap: 10px;
+  }
+  
+  .toast-material-close {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    margin-left: 16px;
+  }
+  
+  .toast-material.success { background-color: #4caf50; color: white;margin-top: 5px; }
+  .toast-material.error { background-color: #f44336; color: white;margin-top: 5px; }
+  .toast-material.info { background-color: #2196f3; color: white;margin-top: 5px; }
+  .toast-material.warning { background-color: #ff9800; color: white;margin-top: 5px; }
 .toast {
     padding: 10px 20px;
     margin-bottom: 10px;

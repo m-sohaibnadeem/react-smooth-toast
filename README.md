@@ -1,13 +1,11 @@
-```markdown
-# React Toaster Library
+# React Smooth Toast
 
 A lightweight and customizable toaster notification library for React built with TypeScript. This library provides an easy-to-use API for displaying toast notifications with customizable icons, styles, positions, and animations.
-
-
 
 ## Features
 
 - **Multiple Toast Types**: Supports `success`, `error`, `info`, and `warning` toasts.
+- **Multiple Toast Variants**: Supports `minimal`, `material`, and more variants coming soon.
 - **Customizable**: Easily customize icons, class names, styles, and positions.
 - **Animations**: Built-in smooth entry and exit animations with pure CSS options.
 - **Responsive**: Toasts are positioned correctly on different screen sizes.
@@ -16,6 +14,7 @@ A lightweight and customizable toaster notification library for React built with
 ## Installation
 
 Install the library using npm:
+
 
 ```bash
 npm install react-smooth-toast
@@ -69,7 +68,7 @@ const App: React.FC = () => {
   return (
     <div>
       <button onClick={showToast}>Show Toasts</button>
-      <ToastContainer position="top-right" />
+      <ToastContainer position="top-right" variant="minimal"/>
     </div>
   );
 };
@@ -133,7 +132,7 @@ toast.success('Success!', {
 Position the toast container anywhere on the screen using the `position` prop:
 
 ```tsx
-<ToastContainer position="bottom-left" />
+<ToastContainer position="bottom-left" variant="minimal"/>
 ```
 
 
@@ -155,7 +154,7 @@ const App: React.FC = () => {
       <button onClick={() => toast.error('Something went wrong!')}>Error</button>
       <button onClick={() => toast.info('Here is some information.')}>Info</button>
       <button onClick={() => toast.warning('Warning! Be careful.')}>Warning</button>
-      <ToastContainer position="top-right" />
+      <ToastContainer position="top-right" variant="material"/>
     </div>
   );
 };

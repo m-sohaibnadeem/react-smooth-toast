@@ -3,7 +3,6 @@ import { ToastContext, ToastOptions } from '../context/ToastContext';
 
 const useToast = () => {
   const { addToast } = useContext(ToastContext);
-
   const showToast = (options: ToastOptions) => {
     addToast(options);
   };

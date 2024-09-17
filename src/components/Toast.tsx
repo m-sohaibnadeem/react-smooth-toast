@@ -5,20 +5,26 @@ import './Toast.css';
 
 interface ToastProps extends ToastOptions {
   removeToast: (id: string) => void;
+  variant?: 'minimal' | 'material';
 }
 
-const Toast: React.FC<ToastProps> = ({ id, type, message, icon, duration = 3000, style, className, removeToast }) => {
+const Toast: React.FC<ToastProps> = ({ 
+  id, 
+  type, 
+  message, 
+  icon, 
+  duration = 3000, 
+  style, 
+  className, 
+  removeToast,
+  variant = 'minimal'
+}) => {
   useEffect(() => {
-    const timer = setTimeout(() => {
-      if (id) removeToast(id);
-    }, duration);
-
-    return () => clearTimeout(timer);
+    if (id) {
+      const timer = setTimeout(() => removeToast(id), duration);
+      return () => clearTimeout(timer);
+    }
   }, [id, removeToast, duration]);
-
-  const handleClick = () => {
-    if (id) removeToast(id);
-  };
 
   const getIcon = () => {
     if (icon) return <div className="icon-wrapper">{icon}</div>;
@@ -30,12 +36,32 @@ const Toast: React.FC<ToastProps> = ({ id, type, message, icon, duration = 3000,
       default: return null;
     }
   };
+  const baseClassName = `toast-enter ${className || ''}`;
 
+  if (variant === 'material') {
+    return (
+      <div
+        className={`toast-material ${type} ${baseClassName}`}
+        style={style}
+        onClick={() => id && removeToast(id)}
+      >
+        <div className="toast-material-content">
+          {getIcon()}
+          <span>{message}</span>
+        </div>
+        <button className="toast-material-close" onClick={(e) => { e.stopPropagation(); id && removeToast(id); }}>
+          &times;
+        </button>
+      </div>
+    );
+  }
+
+  // Default tailwind variant
   return (
     <div
-      className={`toast ${type} ${className || ''} toast-enter`}
+      className={`toast ${type} ${baseClassName} toast-enter`}
       style={style}
-      onClick={handleClick}
+      onClick={() => id && removeToast(id)}
     >
       <div className="toast-content">
         {getIcon()}
