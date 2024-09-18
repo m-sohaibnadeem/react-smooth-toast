@@ -1,22 +1,8 @@
-import React, { createContext, useState, useCallback, ReactNode, FC } from 'react';
+import { createContext, useState, useCallback, ReactNode, FC } from 'react';
+import { ToastContextProps, ToastOptions } from '../types/types';
 
-export type ToastType = 'success' | 'error' | 'info' | 'warning';
 
-export interface ToastOptions {
-  id?: string;
-  type: ToastType;
-  message: string;
-  icon?: ReactNode;
-  duration?: number;
-  style?: React.CSSProperties;
-  className?: string;
-}
 
-interface ToastContextProps {
-  toasts: ToastOptions[];
-  addToast: (options: ToastOptions) => void;
-  removeToast: (id: string) => void;
-}
 
 export const ToastContext = createContext<ToastContextProps>({
   toasts: [],

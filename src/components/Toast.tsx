@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { ToastOptions } from '../context/ToastContext';
-import { ErrorIcon, InfoIcon, SuccessIcon, WarningIcon } from '../icons';
+import { ErrorIcon, InfoIcon, SpinnerIcon, SuccessIcon, WarningIcon } from '../icons';
 import './Toast.css';
+import { ToastOptions } from '../types/types';
 
 interface ToastProps extends ToastOptions {
   removeToast: (id: string) => void;
   variant?: 'minimal' | 'material' | 'modern' | 'progress';
   position?: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | 'top-center' | 'bottom-center';
-
+  isPending?: boolean;
 }
 
 const Toast: React.FC<ToastProps> = ({ 
@@ -20,7 +20,8 @@ const Toast: React.FC<ToastProps> = ({
   className, 
   removeToast,
   variant = 'minimal',
-  position = 'top-right'
+  position = 'top-right',
+  isPending = false
 }) => {
   const [progress, setProgress] = useState<number>(100);
 
@@ -44,6 +45,7 @@ const Toast: React.FC<ToastProps> = ({
 
   const getIcon = () => {
     if (icon) return <div className="icon-wrapper">{icon}</div>;
+    if (isPending) return <SpinnerIcon />;
     switch (type) {
       case 'success': return <SuccessIcon />;
       case 'info': return <InfoIcon />;

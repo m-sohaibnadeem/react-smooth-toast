@@ -4,9 +4,10 @@ A lightweight and customizable toaster notification library for React built with
 
 ## Features
 
-- **Multiple Toast Types**: Supports `success`, `error`, `info`, and `warning` toasts.
-- **Multiple Toast Variants**: Supports `minimal`, `material` , `modern`, `progress` , and more variants coming soon.
+- **Multiple Toast Types**: Supports `success`, `error`, `info`, `warning` and `promise` toasts.
+- **Multiple Toast Variants**: Supports `minimal`, `material` , `modern`, `progress`  and more variants coming soon.
 - **Multiple Toast Positions**: Supports `top-left`, `top-right`, `bottom-left`, `bottom-right`, `top-center`, `bottom-center`.
+- **TypeScript**: Built with TypeScript for better code quality and maintainability.
 - **Customizable**: Easily customize icons, class names, styles, and positions.
 - **Animations**: Built-in smooth entry and exit animations with pure CSS options.
 - **Responsive**: Toasts are positioned correctly on different screen sizes.
@@ -65,10 +66,33 @@ const App: React.FC = () => {
     toast.info('This is an info message!', { className: 'custom-class' });
     toast.warning('This is a warning message!', { style: { backgroundColor: 'orange' } });
   };
+  const fakeAsyncFunction = (): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      // Simulate a random success or failure after 2 seconds
+      setTimeout(() => {
+        if (Math.random() > 0.5) {
+          resolve("Operation successful!");
+        } else {
+          reject(new Error("Operation failed!"));
+        }
+      }, 2000);
+    });
+  };
 
+  const handleAsyncOperation = () => {
+    promise(
+      fakeAsyncFunction(),
+      {
+        pending: 'Loading...',
+        success: (result) => `Operation completed: ${result}`,
+        error: (err) => `Error: ${err.message}`,
+      }
+    );
+  };
   return (
     <div>
       <button onClick={showToast}>Show Toasts</button>
+      <button onClick={handleAsyncOperation}>Show Promise</button>
       <ToastContainer position="top-right" variant="minimal"/>
     </div>
   );

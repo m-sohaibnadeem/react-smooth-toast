@@ -2,11 +2,9 @@ import React, { useContext } from 'react';
 import { ToastContext } from '../context/ToastContext';
 import Toast from './Toast';
 import './ToastContainer.css';
+import { ToastContainerProps } from '../types/types';
 
-export interface ToastContainerProps {
-  position?: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | 'top-center' | 'bottom-center';
-  variant?: 'minimal' | 'material' | 'modern' | 'progress';
-}
+
 
 const ToastContainer: React.FC<ToastContainerProps> = ({ position = 'top-right', variant = 'modern' }) => {
   const { toasts, removeToast } = useContext(ToastContext);
