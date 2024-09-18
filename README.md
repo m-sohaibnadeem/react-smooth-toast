@@ -21,6 +21,9 @@ Install the library using npm:
 ```bash
 npm install react-smooth-toast
 ```
+## Playground
+[Toast Demo Playground](https://react-smooth-toast.vercel.app)
+
 ## Demo gif
 ![Toast Demo](https://raw.githubusercontent.com/m-sohaibnadeem/react-smooth-toast/main/src/assets/toasts-demo.gif)
 
@@ -37,6 +40,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import { ToastProvider } from 'react-smooth-toast';
+import 'react-smooth-toast/style.css';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
