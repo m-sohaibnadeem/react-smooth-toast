@@ -1,7 +1,7 @@
 {
   "name": "react-smooth-toast",
   "private": false,
-  "version": "1.0.11",
+  "version": "1.0.12",
   "type": "module",
   "types": "dist/types/index.d.ts",
   "files": [
@@ -39,7 +39,9 @@
   "exports": {
     ".": {
       "import": "./dist/react-smooth-toast.es.js",
-      "require": "./dist/react-smooth-toast.umd.js"
+      "require": "./dist/react-smooth-toast.umd.js",
+      "types": "./dist/types/index.d.ts"
+
     },
     "./dist/style.css": "./dist/style.css"
   }

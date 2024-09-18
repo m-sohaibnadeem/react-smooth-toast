@@ -8,6 +8,9 @@ export default defineConfig({
     react(),
     dts({
       insertTypesEntry: true,
+      include: ['src'],
+      outDir: 'dist/types',
+      entryRoot: 'src',
     }),
   ],
   build: {
