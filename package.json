@@ -1,7 +1,7 @@
 {
   "name": "react-smooth-toast",
   "private": false,
-  "version": "1.0.13",
+  "version": "1.0.14",
   "type": "module",
   "types": "dist/index.d.ts",
   "description": "A simple and customizable toast library for React",
@@ -32,6 +32,8 @@
   },
   "exports":{
     ".": "./dist/react-toaster.es.js",
-    "./*": "./dist/*"
+    "./*": "./dist/*",
+    "./dist/style.css": "./dist/style.css"
+
   }
 }
