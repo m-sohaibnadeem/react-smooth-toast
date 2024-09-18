@@ -1,7 +1,19 @@
 {
-  "files": [],
-  "references": [
-    { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.node.json" }
-  ]
+  "compilerOptions": {
+    "declaration": true,        // This enables the generation of declaration files (.d.ts)
+    "declarationMap": true,     // Optional: useful for mapping declarations to source files for debugging
+    "emitDeclarationOnly": true, // Emit only type declarations, not JavaScript
+    "outDir": "dist",           // Ensures all output (JS + .d.ts) goes to the 'dist' folder
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "target": "ESNext",
+    "module": "ESNext",
+    "jsx": "react-jsx",
+    "moduleResolution": "Node",
+    "lib": ["DOM", "ESNext"],
+    "sourceMap": true
+  },
+  "include": ["src/**/*"],       // Make sure the source files are included
+  "exclude": ["node_modules"]    // Exclude node_modules from compilation
 }
