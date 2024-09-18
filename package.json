@@ -1,11 +1,12 @@
 {
   "name": "react-smooth-toast",
   "private": false,
-  "version": "1.0.14",
+  "version": "1.0.15",
   "type": "module",
   "types": "dist/index.d.ts",
   "description": "A simple and customizable toast library for React",
   "author": "M Sohaib",
+  "license": "MIT",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
