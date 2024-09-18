@@ -1,9 +1,9 @@
 {
   "name": "react-smooth-toast",
   "private": false,
-  "version": "1.0.17",
+  "version": "1.0.18",
   "type": "module",
-  "types": "dist/index.d.ts",
+  "types": "dist/index.d.ts",              
   "description": "A simple and customizable toast library for React",
   "author": "M Sohaib",
   "license": "MIT",
@@ -13,12 +13,11 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "build:types": "tsc --emitDeclarationOnly --declaration --declarationMap"
-
   },
   "dependencies": {
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
-    },
+  },
   "devDependencies": {
     "@eslint/js": "^9.9.0",
     "@types/node": "^22.5.2",
@@ -34,9 +33,10 @@
     "vite": "^5.4.1"
   },
   "exports": {
-    ".": "./dist/react-toaster.es.js",
-    "./*": "./dist/*",
-    "./dist/style.css": "./dist/style.css",
-    "./types": "./dist/index.d.ts"
+    ".": {
+      "import": "./dist/react-toaster.es.js",    
+      "types": "./dist/index.d.ts"              
+    },
+    "./style.css": "./dist/style.css"           
   }
 }
