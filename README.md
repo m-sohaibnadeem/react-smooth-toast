@@ -5,7 +5,8 @@ A lightweight and customizable toaster notification library for React built with
 ## Features
 
 - **Multiple Toast Types**: Supports `success`, `error`, `info`, and `warning` toasts.
-- **Multiple Toast Variants**: Supports `minimal`, `material`, and more variants coming soon.
+- **Multiple Toast Variants**: Supports `minimal`, `material` , `modern`, `progress` , and more variants coming soon.
+- **Multiple Toast Positions**: Supports `top-left`, `top-right`, `bottom-left`, `bottom-right`, `top-center`, `bottom-center`.
 - **Customizable**: Easily customize icons, class names, styles, and positions.
 - **Animations**: Built-in smooth entry and exit animations with pure CSS options.
 - **Responsive**: Toasts are positioned correctly on different screen sizes.

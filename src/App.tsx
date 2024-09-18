@@ -12,7 +12,7 @@ function App() {
   return (
   <div style={{display:"flex",justifyContent:"center",alignItems:"center"}}>
   <button style={{marginLeft:"35rem"}} onClick={showToast}>Show Toasts</button>
-  <ToastContainer position="bottom-right" variant="material" />
+  <ToastContainer position="top-right" variant="progress" />
   </div>
   )
 }

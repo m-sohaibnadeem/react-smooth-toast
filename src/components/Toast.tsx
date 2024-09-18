@@ -1,11 +1,13 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ToastOptions } from '../context/ToastContext';
 import { ErrorIcon, InfoIcon, SuccessIcon, WarningIcon } from '../icons';
 import './Toast.css';
 
 interface ToastProps extends ToastOptions {
   removeToast: (id: string) => void;
-  variant?: 'minimal' | 'material';
+  variant?: 'minimal' | 'material' | 'modern' | 'progress';
+  position?: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | 'top-center' | 'bottom-center';
+
 }
 
 const Toast: React.FC<ToastProps> = ({ 
@@ -17,12 +19,26 @@ const Toast: React.FC<ToastProps> = ({
   style, 
   className, 
   removeToast,
-  variant = 'minimal'
+  variant = 'minimal',
+  position = 'top-right'
 }) => {
+  const [progress, setProgress] = useState<number>(100);
+
   useEffect(() => {
     if (id) {
-      const timer = setTimeout(() => removeToast(id), duration);
-      return () => clearTimeout(timer);
+      const startTime = Date.now();
+      const timer = setInterval(() => {
+        const elapsedTime = Date.now() - startTime;
+        const newProgress = Math.max(0, 100 - (elapsedTime / duration) * 100);
+        setProgress(newProgress);
+        
+        if (newProgress === 0) {
+          clearInterval(timer);
+          removeToast(id);
+        }
+      }, 10);
+
+      return () => clearInterval(timer);
     }
   }, [id, removeToast, duration]);
 
@@ -36,8 +52,24 @@ const Toast: React.FC<ToastProps> = ({
       default: return null;
     }
   };
-  const baseClassName = `toast-enter ${className || ''}`;
+  const getAnimationClass = () => {
+    if (variant === 'minimal') return 'toast-enter';
+    if (position.includes('left')) return 'toast-enter-left';
+    if (position.includes('right')) return 'toast-enter-right';
+    return 'toast-enter-center';
+  };
 
+  const baseClassName = `toast ${type} ${variant} ${getAnimationClass()} ${className || ''}`;  
+  const renderToast = (content: React.ReactNode) => (
+    <div
+      className={`toast ${type} ${variant} ${baseClassName} toast-enter`}
+      style={style}
+      onClick={() => id && removeToast(id)}
+    >
+      {content}
+      <div className="toast-progress-bar" style={{ width: `${progress}%`,position:"absolute",bottom:0,left:0,height:"3px",backgroundColor:"green",transition:"width 10ms linear", }} />
+    </div>
+  );
   if (variant === 'material') {
     return (
       <div
@@ -55,20 +87,35 @@ const Toast: React.FC<ToastProps> = ({
       </div>
     );
   }
-
-  // Default tailwind variant
-  return (
-    <div
-      className={`toast ${type} ${baseClassName} toast-enter`}
-      style={style}
-      onClick={() => id && removeToast(id)}
-    >
+  if(variant === 'progress'){
+    return (
+    renderToast(
+    <>
       <div className="toast-content">
-        {getIcon()}
-        <span>{message}</span>
-      </div>
+      {getIcon()}
+      <span>{message}</span>
     </div>
-  );
+           <button className="toast-modern-close" onClick={(e) => { e.stopPropagation(); id && removeToast(id); }}>
+           &times;
+         </button>
+    </>
+    )
+    )
+  }
+return (
+  <div
+  className={`toast ${type} ${variant} ${baseClassName} toast-enter`}
+  style={style}
+  onClick={() => id && removeToast(id)}
+>
+  
+  <div className="toast-content">
+    {getIcon()}
+    <span>{message}</span>
+  </div>
+</div>
+)
+
 };
 
 export default Toast;
