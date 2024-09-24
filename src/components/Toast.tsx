@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import { ErrorIcon, InfoIcon, SpinnerIcon, SuccessIcon, WarningIcon } from '../icons';
 import './Toast.css';
-import { ToastOptions } from '../types/types';
+import { ToastOptions, ToastPosition, ToastVariant, ToastType } from '../types/types';
 
 interface ToastProps extends ToastOptions {
   removeToast: (id: string) => void;
-  variant?: 'minimal' | 'material' | 'modern' | 'progress';
-  position?: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | 'top-center' | 'bottom-center';
+  variant?: ToastVariant;
+  position?: ToastPosition;
   isPending?: boolean;
 }
 
@@ -26,52 +26,74 @@ const Toast: React.FC<ToastProps> = ({
   const [progress, setProgress] = useState<number>(100);
 
   useEffect(() => {
-    if (id) {
-      const startTime = Date.now();
-      const timer = setInterval(() => {
-        const elapsedTime = Date.now() - startTime;
-        const newProgress = Math.max(0, 100 - (elapsedTime / duration) * 100);
-        setProgress(newProgress);
-        
-        if (newProgress === 0) {
-          clearInterval(timer);
-          removeToast(id);
-        }
-      }, 10);
+    if (!id) return;
 
-      return () => clearInterval(timer);
-    }
+    const startTime = Date.now();
+    const timer = setInterval(() => {
+      const elapsedTime = Date.now() - startTime;
+      const newProgress = Math.max(0, 100 - (elapsedTime / duration) * 100);
+      setProgress(newProgress);
+      
+      if (newProgress === 0) {
+        clearInterval(timer);
+        removeToast(id);
+      }
+    }, 10);
+
+    return () => clearInterval(timer);
   }, [id, removeToast, duration]);
 
-  const getIcon = () => {
+  const getIcon = useCallback(() => {
     if (icon) return <div className="icon-wrapper">{icon}</div>;
     if (isPending) return <SpinnerIcon />;
-    switch (type) {
-      case 'success': return <SuccessIcon />;
-      case 'info': return <InfoIcon />;
-      case 'error': return <ErrorIcon />;
-      case 'warning': return <WarningIcon />;
-      default: return null;
-    }
-  };
-  const getAnimationClass = () => {
+    const icons: Record<ToastType, JSX.Element> = {
+      success: <SuccessIcon />,
+      info: <InfoIcon />,
+      error: <ErrorIcon />,
+      warning: <WarningIcon />
+    };
+    return icons[type] || null;
+  }, [icon, isPending, type]);
+
+  const getAnimationClass = useCallback(() => {
     if (variant === 'minimal') return 'toast-enter';
     if (position.includes('left')) return 'toast-enter-left';
     if (position.includes('right')) return 'toast-enter-right';
     return 'toast-enter-center';
-  };
+  }, [variant, position]);
 
-  const baseClassName = `toast ${type} ${variant} ${getAnimationClass()} ${className || ''}`;  
-  const renderToast = (content: React.ReactNode) => (
+  const baseClassName = useMemo(() => 
+    `toast ${type} ${variant} ${getAnimationClass()} ${className || ''}`,
+    [type, variant, getAnimationClass, className]
+  );
+
+  const renderToast = useCallback((content: React.ReactNode) => (
     <div
       className={`toast ${type} ${variant} ${baseClassName} toast-enter`}
       style={style}
       onClick={() => id && removeToast(id)}
     >
       {content}
-      <div className="toast-progress-bar" style={{ width: `${progress}%`,position:"absolute",bottom:0,left:0,height:"3px",backgroundColor:"green",transition:"width 10ms linear", }} />
+      <div 
+        className="toast-progress-bar" 
+        style={{ 
+          width: `${progress}%`,
+          position: "absolute",
+          bottom: 0,
+          left: 0,
+          height: "3px",
+          backgroundColor: "green",
+          transition: "width 10ms linear",
+        }} 
+      />
     </div>
-  );
+  ), [type, variant, baseClassName, style, id, removeToast, progress]);
+
+  const handleClose = useCallback((e: React.MouseEvent) => {
+    e.stopPropagation();
+    id && removeToast(id);
+  }, [id, removeToast]);
+
   if (variant === 'material') {
     return (
       <div
@@ -83,41 +105,77 @@ const Toast: React.FC<ToastProps> = ({
           {getIcon()}
           <span>{message}</span>
         </div>
-        <button className="toast-material-close" onClick={(e) => { e.stopPropagation(); id && removeToast(id); }}>
+        <button className="toast-material-close" onClick={handleClose}>
           &times;
         </button>
       </div>
     );
   }
-  if(variant === 'progress'){
-    return (
-    renderToast(
-    <>
-      <div className="toast-content">
-      {getIcon()}
-      <span>{message}</span>
-    </div>
-           <button className="toast-modern-close" onClick={(e) => { e.stopPropagation(); id && removeToast(id); }}>
-           &times;
-         </button>
-    </>
-    )
-    )
-  }
-return (
-  <div
-  className={`toast ${type} ${variant} ${baseClassName} toast-enter`}
-  style={style}
-  onClick={() => id && removeToast(id)}
->
-  
-  <div className="toast-content">
-    {getIcon()}
-    <span>{message}</span>
-  </div>
-</div>
-)
 
+  if (variant === 'progress') {
+    return renderToast(
+      <>
+        <div className="toast-content">
+          {getIcon()}
+          <span>{message}</span>
+        </div>
+        <button className="toast-modern-close" onClick={handleClose}>
+          &times;
+        </button>
+      </>
+    );
+  }
+
+  if (variant === 'rounded') {
+    return (
+      <div
+        className={`toast-rounded ${type} ${baseClassName}`}
+        style={{...style, borderRadius: '25px'}}
+        onClick={() => id && removeToast(id)}
+      >
+        <div className="toast-rounded-content">
+          {getIcon()}
+          <span>{message}</span>
+        </div>
+      </div>
+    );
+  }
+
+  if (variant === 'glassmorphism') {
+    return (
+      <div
+        className={`toast-glassmorphism ${type} ${baseClassName}`}
+        style={{
+          ...style,
+          background: 'rgba(255, 255, 255, 0.25)',
+          backdropFilter: 'blur(10px)',
+          border: '1px solid rgba(255, 255, 255, 0.18)',
+          boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
+          borderRadius: '10px',
+          padding: '15px',
+        }}
+        onClick={() => id && removeToast(id)}
+      >
+        <div className="toast-glassmorphism-content">
+          {getIcon()}
+          <span>{message}</span>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div
+      className={`toast ${type} ${variant} ${baseClassName} toast-enter`}
+      style={style}
+      onClick={() => id && removeToast(id)}
+    >
+      <div className="toast-content">
+        {getIcon()}
+        <span>{message}</span>
+      </div>
+    </div>
+  );
 };
 
-export default Toast;
+export default React.memo(Toast);
