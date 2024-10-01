@@ -36,8 +36,7 @@ function App() {
   return (
   <div style={{display:"flex",justifyContent:"center",alignItems:"center"}}>
   <button style={{marginLeft:"35rem"}} onClick={showToast}>Show Toasts</button>
-  <button style={{marginLeft:"35rem"}} onClick={handleAsyncOperation}>Show Promise</button>
-  <ToastContainer position="top-right" variant="progress" />
+  <ToastContainer position="top-right" variant="gradient" />
   </div>
   )
 }
