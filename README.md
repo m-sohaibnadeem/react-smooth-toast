@@ -1,11 +1,11 @@
 # React Smooth Toast
 
-A lightweight and customizable toaster notification library for React built with TypeScript. This library provides an easy-to-use API for displaying toast notifications with customizable icons, styles, positions, and animations.
+All in one light weight toast notification library for React built with TypeScript. This library provides an easy-to-use API for displaying toast notifications with customizable icons, styles, positions, and animations.
 
 ## Features
 
 - **Multiple Toast Types**: Supports `success`, `error`, `info`, and `warning` toasts.
-- **Multiple Toast Variants**: Supports `minimal`, `material` , `modern`, `progress` , `rounded` , `glassmorphism` and more variants coming soon.
+- **Multiple Toast Variants**: Supports `minimal`, `material` , `modern`, `progress` , `rounded` , `glassmorphism`, `dark`, `gradient` and more variants coming soon.
 - **Multiple Toast Positions**: Supports `top-left`, `top-right`, `bottom-left`, `bottom-right`, `top-center`, `bottom-center`.
 - **Customizable**: Easily customize icons, class names, styles, and positions.
 - **Animations**: Built-in smooth entry and exit animations with pure CSS options.
@@ -166,6 +166,14 @@ const App: React.FC = () => {
 
 export default App;
 ```
+
+## Roadmap 🛣️
+
+- Add more variants
+- Add more animations
+- Add more positions
+- Add more options
+- Reduce bundle size
 
 ## Contribution
 

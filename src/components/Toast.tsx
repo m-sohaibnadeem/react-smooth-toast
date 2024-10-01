@@ -164,6 +164,57 @@ const Toast: React.FC<ToastProps> = ({
     );
   }
 
+  if (variant === 'dark') {
+    return (
+      <div
+        className={`toast-dark ${type} ${baseClassName}`}
+        style={{
+          ...style,
+          background: '#333',
+          color: '#fff',
+          borderRadius: '5px',
+          padding: '12px',
+          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+        }}
+        onClick={() => id && removeToast(id)}
+      >
+        <div className="toast-dark-content">
+          {getIcon()}
+          <span>{message}</span>
+        </div>
+      </div>
+    );
+  }
+
+  if (variant === 'gradient') {
+    const gradientColors = {
+      success: 'linear-gradient(135deg, #4CAF50, #45a049)',
+      error: 'linear-gradient(135deg, #F44336, #d32f2f)',
+      info: 'linear-gradient(135deg, #2196F3, #1976d2)',
+      warning: 'linear-gradient(135deg, #FFC107, #ffa000)'
+    };
+
+    return (
+      <div
+        className={`toast-gradient ${type} ${baseClassName}`}
+        style={{
+          ...style,
+          background: gradientColors[type],
+          color: '#fff',
+          borderRadius: '8px',
+          padding: '15px',
+          boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
+        }}
+        onClick={() => id && removeToast(id)}
+      >
+        <div className="toast-gradient-content">
+          {getIcon()}
+          <span>{message}</span>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div
       className={`toast ${type} ${variant} ${baseClassName} toast-enter`}

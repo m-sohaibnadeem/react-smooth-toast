@@ -488,3 +488,128 @@ animation: toast-spring-center 0.5s ease-out forwards;
 .toast-glassmorphism.error { background-color: rgba(255, 235, 238, 0.25); }
 .toast-glassmorphism.info { background-color: rgba(227, 242, 253, 0.25); }
 .toast-glassmorphism.warning { background-color: rgba(255, 243, 224, 0.25); }
+
+/* Dark toast styles */
+.toast-dark {
+  background-color: #333;
+  color: #fff;
+  border-radius: 8px;
+  padding: 12px 16px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 10px;
+  min-width: 15rem;
+  max-width: 30rem;
+  width: fit-content;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: toast-enter 0.3s ease-out forwards;
+}
+
+.toast-dark-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.toast-dark-close {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.toast-dark-close:hover {
+  opacity: 1;
+}
+
+.toast-dark .toast-progress-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  background-color: rgba(255, 255, 255, 0.3);
+  transition: width 10ms linear;
+}
+
+.toast-dark.success .toast-progress-bar { background-color: #4caf50; }
+.toast-dark.error .toast-progress-bar { background-color: #f44336; }
+.toast-dark.info .toast-progress-bar { background-color: #2196f3; }
+.toast-dark.warning .toast-progress-bar { background-color: #ff9800; }
+
+.toast-dark.success { border-left: 4px solid #4caf50; }
+.toast-dark.error { border-left: 4px solid #f44336; }
+.toast-dark.info { border-left: 4px solid #2196f3; }
+.toast-dark.warning { border-left: 4px solid #ff9800; }
+
+/* Gradient toast styles */
+.toast-gradient {
+  color: #fff;
+  border-radius: 8px;
+  padding: 12px 16px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  margin-bottom: 10px;
+  min-width: 15rem;
+  max-width: 30rem;
+  width: fit-content;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: toast-enter 0.3s ease-out forwards;
+}
+
+.toast-gradient-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.toast-gradient-close {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.toast-gradient-close:hover {
+  opacity: 1;
+}
+
+.toast-gradient .toast-progress-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  background-color: rgba(255, 255, 255, 0.3);
+  transition: width 10ms linear;
+}
+
+.toast-gradient.success {
+  background: linear-gradient(135deg, #4CAF50, #45a049);
+}
+
+.toast-gradient.error {
+  background: linear-gradient(135deg, #F44336, #d32f2f);
+}
+
+.toast-gradient.info {
+  background: linear-gradient(135deg, #2196F3, #1976d2);
+}
+
+.toast-gradient.warning {
+  background: linear-gradient(135deg, #FFC107, #ffa000);
+}
