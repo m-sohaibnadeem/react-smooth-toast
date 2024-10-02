@@ -25,7 +25,7 @@ npm install react-smooth-toast
 [Toast Demo Playground](https://react-smooth-toast.vercel.app)
 
 ## Demo gif
-![Toast Demo](https://raw.githubusercontent.com/m-sohaibnadeem/react-smooth-toast/main/src/assets/toasts-demo.gif)
+![Toast Demo](https://raw.githubusercontent.com/m-sohaibnadeem/react-smooth-toast/main/src/assets/react-smooth-demo.gif)
 
 
 ## Getting Started
