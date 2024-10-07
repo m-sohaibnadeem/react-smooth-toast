@@ -613,3 +613,41 @@ animation: toast-spring-center 0.5s ease-out forwards;
 .toast-gradient.warning {
   background: linear-gradient(135deg, #FFC107, #ffa000);
 }
+.toast-group {
+  position: relative;
+}
+
+.toast-group-info {
+  background-color: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  position: absolute;
+  bottom: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.3s, bottom 0.3s;
+}
+
+.toast-group:hover .toast-group-info {
+  opacity: 1;
+  bottom: -25px;
+}
+
+.toast-group-count {
+  background-color: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  position: absolute;
+  top: -5px;
+  right: -5px;
+}

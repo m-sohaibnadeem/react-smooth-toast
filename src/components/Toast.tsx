@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useMemo } from 'react';
+import React, { useEffect, useState, useCallback, useMemo, useRef } from 'react';
 import { ErrorIcon, InfoIcon, SpinnerIcon, SuccessIcon, WarningIcon } from '../icons';
 import './Toast.css';
 import { ToastOptions, ToastPosition, ToastVariant, ToastType } from '../types/types';
@@ -8,6 +8,9 @@ interface ToastProps extends ToastOptions {
   variant?: ToastVariant;
   position?: ToastPosition;
   isPending?: boolean;
+  pauseOnHover?: boolean;
+  groupId?: string;
+  groupCount?: number;
 }
 
 const Toast: React.FC<ToastProps> = ({ 
@@ -21,27 +24,35 @@ const Toast: React.FC<ToastProps> = ({
   removeToast,
   variant = 'minimal',
   position = 'top-right',
-  isPending = false
+  isPending = false,
+  pauseOnHover = false,
+  groupId,
+  groupCount = 1
 }) => {
   const [progress, setProgress] = useState<number>(100);
+  const [isPaused, setIsPaused] = useState<boolean>(false);
+  const [swipeOffset, setSwipeOffset] = useState<number>(0);
+  const toastRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!id) return;
-
     const startTime = Date.now();
+    let elapsedTime = 0;
     const timer = setInterval(() => {
-      const elapsedTime = Date.now() - startTime;
-      const newProgress = Math.max(0, 100 - (elapsedTime / duration) * 100);
-      setProgress(newProgress);
-      
-      if (newProgress === 0) {
-        clearInterval(timer);
-        removeToast(id);
+      if (!isPaused) {
+        elapsedTime = Date.now() - startTime;
+        const newProgress = Math.max(0, 100 - (elapsedTime / duration) * 100);
+        setProgress(newProgress);
+        
+        if (newProgress === 0) {
+          clearInterval(timer);
+          removeToast(id);
+        }
       }
     }, 10);
 
     return () => clearInterval(timer);
-  }, [id, removeToast, duration]);
+  }, [id, removeToast, duration, isPaused]);
 
   const getIcon = useCallback(() => {
     if (icon) return <div className="icon-wrapper">{icon}</div>;
@@ -67,14 +78,56 @@ const Toast: React.FC<ToastProps> = ({
     [type, variant, getAnimationClass, className]
   );
 
+  const handleMouseEnter = useCallback(() => {
+    if (pauseOnHover) {
+      setIsPaused(true);
+    }
+  }, [pauseOnHover]);
+
+  const handleMouseLeave = useCallback(() => {
+    if (pauseOnHover) {
+      setIsPaused(false);
+    }
+  }, [pauseOnHover]);
+
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    const touch = e.touches[0];
+    setSwipeOffset(touch.clientX);
+  }, []);
+
+  const handleTouchMove = useCallback((e: React.TouchEvent) => {
+    if (!toastRef.current) return;
+    const touch = e.touches[0];
+    const diff = touch.clientX - swipeOffset;
+    toastRef.current.style.transform = `translateX(${diff}px)`;
+  }, [swipeOffset]);
+
+  const handleTouchEnd = useCallback((e: React.TouchEvent) => {
+    if (!toastRef.current) return;
+    const touch = e.changedTouches[0];
+    const diff = touch.clientX - swipeOffset;
+    if (Math.abs(diff) > 100) {
+      removeToast(id ?? '');
+    } else {
+      toastRef.current.style.transform = 'translateX(0)';
+    }
+  }, [id, removeToast, swipeOffset]);
+
   const renderToast = useCallback((content: React.ReactNode) => (
     <div
+      ref={toastRef}
       className={`toast ${type} ${variant} ${baseClassName} toast-enter`}
-      style={style}
+      style={{...style, transition: 'transform 0.3s ease-out'}}
       onClick={() => id && removeToast(id)}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
     >
       {content}
-      <div 
+      {variant === 'progress' && (
+        <div 
         className="toast-progress-bar" 
         style={{ 
           width: `${progress}%`,
@@ -86,25 +139,36 @@ const Toast: React.FC<ToastProps> = ({
           transition: "width 10ms linear",
         }} 
       />
+      )}
+      {groupCount > 1 && (
+        <div className="toast-group-count">
+          {groupCount}
+        </div>
+      )}
     </div>
-  ), [type, variant, baseClassName, style, id, removeToast, progress]);
+  ), [type, variant, baseClassName, style, id, removeToast, progress, handleMouseEnter, handleMouseLeave, handleTouchStart, handleTouchMove, handleTouchEnd, groupCount]);
 
   const handleClose = useCallback((e: React.MouseEvent) => {
     e.stopPropagation();
     id && removeToast(id);
   }, [id, removeToast]);
 
-  if (variant === 'material') {
-    return (
-      <div
-        className={`toast-material ${type} ${baseClassName}`}
-        style={style}
-        onClick={() => id && removeToast(id)}
-      >
-        <div className="toast-material-content">
-          {getIcon()}
-          <span>{message}</span>
+  const renderGroupedToast = (content: React.ReactNode) => (
+    <div className="toast-group">
+      {renderToast(content)}
+      {groupCount > 1 && (
+        <div className="toast-group-info">
+          {groupCount} similar notifications
         </div>
+      )}
+    </div>
+  );
+
+  if (variant === 'material') {
+    return renderGroupedToast(
+      <div className="toast-material-content">
+        {getIcon()}
+        <span>{message}</span>
         <button className="toast-material-close" onClick={handleClose}>
           &times;
         </button>
@@ -113,7 +177,7 @@ const Toast: React.FC<ToastProps> = ({
   }
 
   if (variant === 'progress') {
-    return renderToast(
+    return renderGroupedToast(
       <>
         <div className="toast-content">
           {getIcon()}
@@ -127,61 +191,28 @@ const Toast: React.FC<ToastProps> = ({
   }
 
   if (variant === 'rounded') {
-    return (
-      <div
-        className={`toast-rounded ${type} ${baseClassName}`}
-        style={{...style, borderRadius: '25px'}}
-        onClick={() => id && removeToast(id)}
-      >
-        <div className="toast-rounded-content">
-          {getIcon()}
-          <span>{message}</span>
-        </div>
+    return renderGroupedToast(
+      <div className="toast-rounded-content">
+        {getIcon()}
+        <span>{message}</span>
       </div>
     );
   }
 
   if (variant === 'glassmorphism') {
-    return (
-      <div
-        className={`toast-glassmorphism ${type} ${baseClassName}`}
-        style={{
-          ...style,
-          background: 'rgba(255, 255, 255, 0.25)',
-          backdropFilter: 'blur(10px)',
-          border: '1px solid rgba(255, 255, 255, 0.18)',
-          boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
-          borderRadius: '10px',
-          padding: '15px',
-        }}
-        onClick={() => id && removeToast(id)}
-      >
-        <div className="toast-glassmorphism-content">
-          {getIcon()}
-          <span>{message}</span>
-        </div>
+    return renderGroupedToast(
+      <div className="toast-glassmorphism-content">
+        {getIcon()}
+        <span>{message}</span>
       </div>
     );
   }
 
   if (variant === 'dark') {
-    return (
-      <div
-        className={`toast-dark ${type} ${baseClassName}`}
-        style={{
-          ...style,
-          background: '#333',
-          color: '#fff',
-          borderRadius: '5px',
-          padding: '12px',
-          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-        }}
-        onClick={() => id && removeToast(id)}
-      >
-        <div className="toast-dark-content">
-          {getIcon()}
-          <span>{message}</span>
-        </div>
+    return renderGroupedToast(
+      <div className="toast-dark-content">
+        {getIcon()}
+        <span>{message}</span>
       </div>
     );
   }
@@ -194,37 +225,18 @@ const Toast: React.FC<ToastProps> = ({
       warning: 'linear-gradient(135deg, #FFC107, #ffa000)'
     };
 
-    return (
-      <div
-        className={`toast-gradient ${type} ${baseClassName}`}
-        style={{
-          ...style,
-          background: gradientColors[type],
-          color: '#fff',
-          borderRadius: '8px',
-          padding: '15px',
-          boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
-        }}
-        onClick={() => id && removeToast(id)}
-      >
-        <div className="toast-gradient-content">
-          {getIcon()}
-          <span>{message}</span>
-        </div>
+    return renderGroupedToast(
+      <div className="toast-gradient-content" style={{ background: gradientColors[type] }}>
+        {getIcon()}
+        <span>{message}</span>
       </div>
     );
   }
 
-  return (
-    <div
-      className={`toast ${type} ${variant} ${baseClassName} toast-enter`}
-      style={style}
-      onClick={() => id && removeToast(id)}
-    >
-      <div className="toast-content">
-        {getIcon()}
-        <span>{message}</span>
-      </div>
+  return renderGroupedToast(
+    <div className="toast-content">
+      {getIcon()}
+      <span>{message}</span>
     </div>
   );
 };

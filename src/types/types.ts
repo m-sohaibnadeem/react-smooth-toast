@@ -16,7 +16,7 @@ export interface ToastOptions {
 
 // Toast Component Props
 export interface ToastProps extends ToastOptions {
-  removeToast: (id: string) => void;
+  removeToast: (id: string | undefined) => void;
   variant?: ToastVariant;
   position?: ToastPosition;
 }
@@ -25,6 +25,9 @@ export interface ToastProps extends ToastOptions {
 export interface ToastContainerProps {
   position?: ToastPosition;
   variant?: ToastVariant;
+  pauseOnHover?: boolean;
+  groupId?: string;
+  groupCount?: number;
 }
 
 // Toast Context Props
