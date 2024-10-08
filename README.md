@@ -2,9 +2,10 @@
 
 All in one light weight toast notification library for React built with TypeScript. This library provides an easy-to-use API for displaying toast notifications with customizable icons, styles, positions, and animations.
 
-## Changelog Version 1.0.23 👌
+## Changelog Version 1.0.24 👌
 Note: No Breaking Changes
 
+- Enhanced Progress Bar variant to have different color based on the type of the toast.
 - Added `pauseOnHover` prop to the `ToastContainer` component to pause the toast countdown when hovering over the toast.
 
 - Added `groupId` and `groupCount` props to the `ToastContainer` component to control the behavior of grouped toasts. Now you can control how many toasts will be shown in the group. It will have a info tooltip on hover to show the total number of toasts in the group.

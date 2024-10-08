@@ -1,7 +1,7 @@
 {
   "name": "react-smooth-toast",
   "private": false,
-  "version": "1.0.23",
+  "version": "1.0.24",
   "type": "module",
   "types": "dist/index.d.ts",              
   "description": "A lightweight, customizable, and easy-to-use toast notification library for React. Add sleek and responsive toast messages to your app with flexible styling options and built-in accessibility support. Perfect for developers seeking a simple, fast, and adaptable notification solution.",  "author": "M Sohaib",
