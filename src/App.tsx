@@ -13,6 +13,9 @@ function App() {
 
   const showToast = () => {
     toast.success('This is a success message!');
+    toast.error('This is an error message!');
+    toast.info('This is an info message!');
+    toast.warning('This is a warning message!');
   };
 
   return (
@@ -46,8 +49,7 @@ function App() {
       </div>
       <button onClick={showToast}>Show Toasts</button>
       <ToastContainer position={position} variant={variant} pauseOnHover={true}
-      groupId="group1"
-      groupCount={2}
+    
       />
     </div>
   )

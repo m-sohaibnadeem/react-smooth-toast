@@ -135,7 +135,7 @@ const Toast: React.FC<ToastProps> = ({
           bottom: 0,
           left: 0,
           height: "3px",
-          backgroundColor: "green",
+          backgroundColor: type === "success" ? "green" : type === "error" ? "red" : type === "info" ? "blue" : type === "warning" ? "orange" : "gray",
           transition: "width 10ms linear",
         }} 
       />
